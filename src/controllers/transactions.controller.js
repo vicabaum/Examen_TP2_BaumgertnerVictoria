@@ -6,10 +6,20 @@ class TransactionsController {
   }
 
   getTransactions = async (req, res) => {
-    const transactions = await this.service.getTransactions();
-    res.json(transactions);
+    try {
+      const transactions = await this.service.getTransactions();
+      
+      if (!transactions || Object.keys(transactions).length === 0) {
+        return res.status(404).json({ message: "No se encontraron transacciones." });
+      }
+      
+      res.json(transactions);
+    } catch (error) {
+      console.error("Error al obtener transacciones:", error);
+      res.status(500).json({ message: "Error" });
+    }
   };
-
+  
   postTransaction = async (req, res) => {
     const data = req.body;
     const newTransaction = await this.service.postTransaction(data);

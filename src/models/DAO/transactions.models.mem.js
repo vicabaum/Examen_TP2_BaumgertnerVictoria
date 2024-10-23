@@ -4,7 +4,16 @@ class TransactionsMemModel {
     }
   
     getTransactions = async () => {
-      return this.transactions;
+      try {
+        if (!this.transactions || this.transactions.length === 0) {
+          throw new Error("No se encontraron transacciones.");
+        }
+  
+        return this.transactions; 
+      } catch (error) {
+        console.error("Error en getTransactions:", error);
+        throw error; 
+      }
     };
   
     postTransaction = async (data) => {
